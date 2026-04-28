@@ -8,12 +8,12 @@
 - Planner agent: 요구사항, 사용자 스토리, IA, 화면 목록, 인수 기준을 담당합니다.
 - Designer agent: Figma 작업, 디자인 시스템 사용, UI 검토, 접근성 검토를 담당합니다.
 - Architect agent: 시스템 아키텍처, 보안, 성능, 런타임 구조, 배포 구조를 담당합니다.
+- Security agent: 보안 정책 결정, 인증/세션 정책, 토큰 저장 위치, CORS 허용 정책, 시크릿 관리 표준을 담당합니다 (Architect agent와 협업하거나 Architect 내부 영역으로 통합 가능).
 - Application Architecture agent: 프로그램 상세 설계, 정책, 권한, 상태 흐름, DB 설계, 데이터 계약 정합성을 담당합니다.
 - Backend agent: API 구현, DB 연동, 서비스 로직, 백엔드 테스트를 담당합니다.
 - Frontend agent: 퍼블리싱, 화면 구현, 라우팅, 상태 관리, API 연동, 폼/권한 처리, 프론트 테스트를 담당합니다.
 - QA agent: 테스트 전략, 테스트 케이스, 단위/통합/e2e 테스트 범위를 담당합니다.
 - Release agent: 배포 체크리스트, 릴리즈 노트, 롤백 계획, 운영 인수인계를 담당합니다.
-- Security agent: 보안 정책 결정, 인증/세션 정책, 토큰 저장 위치, CORS 허용 정책, 시크릿 관리 표준을 담당합니다 (Architect agent와 협업하거나 Architect 내부 영역으로 통합 가능).
 
 ## Frontend agent와 퍼블리싱
 

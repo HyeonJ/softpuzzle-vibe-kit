@@ -1,181 +1,92 @@
 # Softpuzzle Vibe Kit
 
-Softpuzzle Vibe Kit은 Claude Code와 Codex로 소프트웨어 프로젝트를 기획부터 배포까지 단계별로 수행하기 위한 플러그인 골격입니다.
+회사 프로젝트를 기획부터 배포까지 단계별로 수행하기 위한 **Codex / Claude Code 듀얼 플러그인**입니다. PM · 기획 · 디자인 · 아키텍처 · 개발 · QA · 릴리즈 단계가 각각 독립적인 스킬 · 에이전트 · 템플릿 · 표준으로 분리되어 있어, 한 프로젝트에 필요한 단계만 골라 쓸 수 있습니다.
 
-이 플러그인은 하나의 거대한 지침 파일로 모든 일을 처리하지 않습니다. PM, 요구사항, IA, 디자인, 아키텍처, 개발, 테스트, 배포 단계를 각각 독립적인 스킬과 템플릿으로 나누어 범용 프로젝트에 재사용할 수 있도록 구성합니다.
+## 누가 왜 쓰는가
 
-## 사용 환경
+- 새 프로젝트 의뢰가 들어왔을 때 "어떤 단계부터, 무엇을 산출물로, 어떤 양식으로" 시작할지 막막한 경우.
+- 회사 내 여러 프로젝트가 같은 표준(코딩 컨벤션 · API 응답 포맷 · 테스트 환경 · 산출물 양식)을 따라가게 하고 싶은 경우.
+- LLM 에이전트에게 작업을 맡길 때 임의 결정 없이 사내 표준을 따르게 하고 싶은 경우.
 
-이 키트는 Claude Code와 Codex 두 환경에서 동일하게 동작합니다.
+## 동작 환경
 
-- Claude Code 매니페스트: `.claude-plugin/plugin.json`
-- Codex 매니페스트: `.codex-plugin/plugin.json`
-- `skills/`, `agents/`, `templates/`, `standards/`, `scripts/`, `integrations/`는 두 환경이 공유합니다.
-- 환경 고유 기능(hooks, slash commands)만 각자 추가합니다.
+| 환경 | 매니페스트 | 진입점 |
+|---|---|---|
+| Claude Code | `.claude-plugin/plugin.json` | 슬래시 커맨드 (`/charter`, `/requirements`, `/wbs`, `/erd`, `/api-spec`) |
+| Codex | `.codex-plugin/plugin.json` | 디렉터리 자동 인식 |
 
-Claude Code에서는 `commands/` 디렉터리의 슬래시 커맨드(`/charter`, `/requirements`, `/wbs`, `/erd`, `/api-spec`)로 단계별 작업을 시작할 수 있습니다.
+`skills/`, `agents/`, `templates/`, `standards/`, `scripts/`, `integrations/`는 두 환경이 공유합니다. 환경 고유 기능(hooks, slash commands 포맷)만 각자 추가합니다.
 
-## 구조
+## 핵심 에이전트와 역할
+
+| 에이전트 | 담당 | 작성 상태 |
+|---|---|---|
+| PM | 프로젝트 착수, R&R, WBS, 마일스톤 추적, 리스크 로그 | 골격 |
+| Planner | 요구사항, 사용자 스토리, IA, 화면 목록, 인수 기준 | 골격 |
+| Designer | Figma 작업, 디자인 시스템 사용, UI 검토, 접근성 검토 | 골격 |
+| Architect | 시스템 아키텍처, 보안, 성능, 런타임 구조, 배포 구조 | 골격 |
+| Security | 보안 정책, 인증/세션 정책, 토큰 저장 위치, CORS, 시크릿 관리 표준 | 미작성 |
+| Application Architecture | 프로그램 상세 설계, 정책, 권한, 상태 흐름, DB 설계, 데이터 계약 정합성 | ✅ 작성됨 |
+| Backend | API 구현, DB 연동, 서비스 로직, 백엔드 테스트 | ✅ 작성됨 |
+| Frontend | 퍼블리싱, 화면 구현, 라우팅, 상태 관리, API 연동, 폼/권한, 프론트 테스트 | ✅ 작성됨 |
+| QA | 테스트 전략, 테스트 케이스, 단위/통합/e2e 테스트 범위 | 골격 |
+| Release | 배포 체크리스트, 릴리즈 노트, 롤백 계획, 운영 인수인계 | 골격 |
+
+각 에이전트의 상세 역할 · 사용 스킬 · 인수인계 양식은 `agents/*.md` 또는 `agents/roles.md`에서 확인합니다.
+
+## 설치
+
+### Claude Code
+
+```text
+/plugin marketplace add HyeonJ/softpuzzle-vibe-kit
+/plugin install softpuzzle-vibe-kit@softpuzzle-vibe-kit
+```
+
+설치 후 슬래시 커맨드(`/charter`, `/requirements`, `/wbs`, `/erd`, `/api-spec`)로 단계별 작업을 시작합니다.
+
+### Codex 또는 일반 clone
+
+```bash
+git clone https://github.com/HyeonJ/softpuzzle-vibe-kit.git
+cd softpuzzle-vibe-kit
+npm install   # 자동화 스크립트 사용 시
+```
+
+Codex는 디렉터리 안에서 실행하면 `.codex-plugin/plugin.json`을 자동 인식합니다.
+
+## 첫 사용 흐름
+
+새 프로젝트를 시작한다고 가정한 표준 흐름:
+
+1. **착수 보고서** — `/charter` (Claude Code) 또는 PM 에이전트에 프로젝트 브리프 작성 요청. 결과는 `templates/project-brief.md` 양식.
+2. **요구사항 정의** — `/requirements` 또는 Planner 에이전트. 기능 / 비기능 요구사항을 `templates/requirements.md`에 정리.
+3. **WBS** — `/wbs`. 단계 · 작업 패키지 · 의존성을 `templates/wbs.md`에 정리.
+4. **설계** — Application Architecture 에이전트가 `templates/detail-design.md`, `templates/db-design.md`, `templates/api-contract-handoff.md`를 채움.
+5. **개발** — Backend / Frontend 에이전트가 각자의 `agents/*.md` 작업 절차에 따라 코드 구현.
+6. **테스트 · 배포** — QA / Release 에이전트 (작성 진행 중).
+
+각 단계의 LLM 에이전트는 사내 표준(`standards/`)을 자동으로 따르고, 다음 단계로 넘기는 인수인계 메모를 남깁니다.
+
+## 디렉터리 구조
 
 ```text
 softpuzzle-vibe-kit/
-├─ .codex-plugin/
-│  └─ plugin.json
-├─ AGENTS.md
-├─ agents/
-│  └─ roles.md
-├─ assets/
-├─ docs/
-│  ├─ delivery-lifecycle.md
-│  └─ implementation-roadmap.md
-├─ integrations/
-│  └─ publish-harness-codex.md
-├─ scripts/
-├─ skills/
-│  ├─ pm-governance/
-│  ├─ wbs-planning/
-│  ├─ requirements-definition/
-│  ├─ ia-screen-planning/
-│  ├─ figma-design/
-│  ├─ system-architecture/
-│  ├─ security-performance/
-│  ├─ dev-environment/
-│  ├─ publishing/
-│  ├─ detail-design/
-│  ├─ db-design/
-│  ├─ api-development/
-│  ├─ frontend-development/
-│  ├─ unit-testing/
-│  ├─ integration-testing/
-│  └─ release-deployment/
-├─ standards/
-├─ templates/
-└─ tools/
+├─ .claude-plugin/        # Claude Code 매니페스트
+├─ .codex-plugin/         # Codex 매니페스트
+├─ commands/              # Claude Code 슬래시 커맨드
+├─ agents/                # 역할별 에이전트 정의
+├─ skills/                # 단계별 작업 절차 (16 skills)
+├─ standards/             # 사내 품질 표준
+├─ templates/             # 산출물 양식
+├─ integrations/          # 외부 도구 연동 (publish-harness-codex 등)
+├─ scripts/               # 자동화 스크립트
+├─ docs/                  # 진행 현황(project-progress.md), 자동화 사용법(scripts-usage.md), 생명주기(delivery-lifecycle.md)
+├─ AGENTS.md              # Codex용 가이드
+├─ CLAUDE.md              # Claude Code용 가이드
+└─ README.md              # 본 문서
 ```
 
-## 프론트엔드 작업 자산
+## 라이선스
 
-Frontend agent는 퍼블리싱과 프론트 앱 개발을 함께 담당합니다.
-
-관련 문서:
-
-```text
-agents/frontend-agent.md
-integrations/publish-harness-codex.md
-standards/frontend/frontend-quality.md
-templates/frontend/frontend-connect-plan.md
-templates/frontend/api-integration-map.md
-templates/frontend/frontend-screen-checklist.md
-templates/frontend/component-inventory.md
-templates/frontend/frontend-handoff.md
-docs/frontend-agent-profile-schema.md
-docs/project-progress.md
-```
-
-## 애플리케이션 아키텍처 작업 자산
-
-Application Architecture agent는 프로그램 상세 설계, 정책, 권한, DB 설계, 데이터 계약 정합성을 함께 담당합니다.
-
-관련 문서:
-
-```text
-agents/application-architecture-agent.md
-skills/detail-design/SKILL.md
-skills/db-design/SKILL.md
-templates/detail-design.md
-templates/application-data-contract.md
-templates/api-contract-handoff.md
-templates/db-design.md
-```
-
-스크립트 사용 전 최초 1회 의존성을 설치합니다.
-
-```bash
-npm install
-```
-
-프론트 프로젝트 분석:
-
-```bash
-node scripts/inspect-frontend-project.mjs --project <frontend-project>
-```
-
-기본 출력:
-
-```text
-<frontend-project>/docs/frontend-project-profile.md
-```
-
-JSON 출력:
-
-```bash
-node scripts/inspect-frontend-project.mjs --project <frontend-project> --json
-```
-
-API 명세 분석:
-
-```bash
-node scripts/inspect-api-spec.mjs --spec <api-spec>
-```
-
-기본 출력:
-
-```text
-<spec-dir>/api-spec-profile.md
-```
-
-JSON 출력:
-
-```bash
-node scripts/inspect-api-spec.mjs --spec <api-spec> --json
-```
-
-API 연동 맵 생성:
-
-```bash
-node scripts/inspect-frontend-project.mjs --project ./app --json > ./docs/frontend-project-profile.json
-
-node scripts/inspect-api-spec.mjs --spec ./docs/openapi.json --json > ./docs/api-spec-profile.json
-
-node scripts/create-api-integration-map.mjs \
-  --frontend-profile ./docs/frontend-project-profile.json \
-  --api-profile ./docs/api-spec-profile.json \
-  --output ./docs/api-integration-map.md
-```
-
-Windows PowerShell에서 `>`가 UTF-16 파일을 만들면 JSON 입력이 깨질 수 있습니다. 이 경우 다음처럼 UTF-8로 저장합니다.
-
-```powershell
-node scripts/inspect-frontend-project.mjs --project ./app --json |
-  Set-Content -Encoding UTF8 ./docs/frontend-project-profile.json
-
-node scripts/inspect-api-spec.mjs --spec ./docs/openapi.yaml --json |
-  Set-Content -Encoding UTF8 ./docs/api-spec-profile.json
-```
-
-프론트엔드 에이전트 보조 스크립트 smoke 검증:
-
-```bash
-npm run check
-npm run smoke:frontend-agent
-```
-
-JSON profile 규격은 `docs/frontend-agent-profile-schema.md`에서 확인합니다.
-
-## 설계 원칙
-
-- 플러그인은 마켓플레이스 배포 단위와 진입점 역할을 합니다.
-- 스킬은 각 업무 영역의 방법론과 작업 절차를 담당합니다.
-- 도구는 문서 생성, 검증, 변환, 품질 게이트처럼 반복 가능한 자동화를 담당합니다.
-- 에이전트 정의는 PM, 기획자, 디자이너, 아키텍트, 개발자, QA, 릴리즈 담당자 같은 역할 경계를 설명합니다.
-- 템플릿은 프로젝트 산출물의 기본 형식을 제공합니다.
-- 표준 문서는 산출물 품질과 단계 간 인수인계 기준을 정의합니다.
-
-## 첫 번째 목표
-
-1. 플러그인 이름, 표시 이름, 마켓플레이스 설명을 확정합니다.
-2. 각 단계별 `skills/*/SKILL.md`를 실제 업무에 사용할 수 있는 수준으로 구체화합니다.
-3. 프로젝트 상태 파일 규격을 정해 스킬 간 인수인계가 가능하게 만듭니다.
-4. 템플릿 기반 산출물 생성 스크립트를 추가합니다.
-5. 문서 흐름이 안정된 뒤 Figma, GitHub, Jira, Notion 같은 외부 연동을 붙입니다.
-
+MIT (`.claude-plugin/plugin.json` / `.codex-plugin/plugin.json` 참조).
