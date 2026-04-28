@@ -30,9 +30,9 @@
 - **롤백 가능성 검증**: 각 마이그레이션이 reversible인가, irreversible이면 백업 plan 명시.
 - 운영 적용 전 staging 검증 필수.
 
-## Release agent가 받아야 할 정보 항목 (총 11개)
+## Release agent가 받아야 할 정보 항목 (총 12개)
 
-**Producer 측 (backend 2 + frontend 4 = 6개):**
+**Producer 측 (backend 2 + frontend 4 + QA 1 = 7개):**
 
 1. backend: 환경변수 목록 (`docs/handoff-to-release.md` 또는 동등 위치).
 2. backend: Flyway 마이그레이션 실행 순서.
@@ -40,14 +40,15 @@
 4. frontend: 빌드/배포 주의사항.
 5. frontend: feature flag.
 6. frontend: rollback 메모.
+7. QA: 테스트 통과 보고서 (`docs/qa-report.md` — `qa-quality.md` 섹션 7 양식).
 
 **Release agent 자체 추가 (5개):**
 
-7. 운영 DB 연결 정보 (Architect agent 미작성 시 release agent 임시 결정).
-8. 서버/컨테이너 환경 정의 (배포 환경별 — dev/stage/prod).
-9. 모니터링·알림 담당자 연락처.
-10. 배포 시점 승인자 (PM 결정 인용).
-11. 환경별 설정 분리 (dev/stage/prod의 환경변수 차이).
+8. 운영 DB 연결 정보 (Architect agent 미작성 시 release agent 임시 결정).
+9. 서버/컨테이너 환경 정의 (배포 환경별 — dev/stage/prod).
+10. 모니터링·알림 담당자 연락처.
+11. 배포 시점 승인자 (PM 결정 인용).
+12. 환경별 설정 분리 (dev/stage/prod의 환경변수 차이).
 
 **통합 환경변수 목록 양식 (release agent의 Environment 트랙 산출물):**
 

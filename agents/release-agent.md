@@ -63,7 +63,7 @@ templates/release-checklist.md
 - backend agent의 release 인수인계 메모 (환경변수 목록, Flyway 마이그레이션 실행 순서)
 - frontend agent의 `frontend-handoff.md` "Release에 넘길 사항" (환경 변수, 빌드/배포 주의사항, feature flag, rollback 메모)
 - application-architecture agent의 배포 구조 정의 (있는 경우)
-- **QA agent의 테스트 통과 보고서 (placeholder — 양식은 후속 Step C-2 spec에서 정의 예정. 부재 시 release agent는 "QA 게이트 실패"로 기록하고 배포 차단 보고를 우선합니다. 사용자 또는 PM이 명시적 면제(`QA-WAIVER` 메모)를 한 경우에만 진행)**
+- **QA agent의 테스트 통과 보고서** (`docs/qa-report.md` — `standards/qa/qa-quality.md` 섹션 7 양식, 8 필수 항목 + 게이트 판정 Pass/Fail/Pass-with-known-issues). 부재 시 release agent는 "QA 게이트 실패"로 기록하고 배포 차단 보고를 우선합니다. 사용자 또는 PM이 명시적 면제(`QA-WAIVER` 메모)를 한 경우에만 진행.
 - Architect agent의 인프라 정의 (있는 경우 — Architect 미작성 시 release agent가 임시 결정, 임시 결정은 인수인계 메모에 명시)
 - 프로젝트 상태 파일
 
@@ -75,7 +75,7 @@ templates/release-checklist.md
 
 ### Environment 트랙 산출물
 
-- 통합 환경변수 목록 (단일 출처 — `release-quality.md` 섹션 6의 11개 항목 양식)
+- 통합 환경변수 목록 (단일 출처 — `release-quality.md` 섹션 6의 12개 항목 양식)
 - 로컬 실행 명령 (backend·frontend별)
 - 검증 명령 (`./gradlew build`, `./gradlew test`, `npm run build`, `npm test`)
 - CI 환경 정의 (release-quality.md 섹션 7 빌드·배포 명령 표준 cross-reference)
@@ -125,7 +125,7 @@ Release agent는 아래 작업을 직접 확정하거나 구현하지 않습니�
 ### Deployment 트랙 절차
 
 1. backend·frontend·application-architecture·QA 인수인계 메모 수집.
-2. **QA 보고서 수신 확인** — 부재 시 게이트 실패로 기록하고 배포 차단 보고 (사용자 또는 PM 명시 면제 시에만 진행).
+2. **QA 보고서 수신 확인** — 부재 시 게이트 실패로 기록하고 배포 차단 보고 (사용자 또는 PM 명시 면제 시에만 진행). **`Pass-with-known-issues` 수신 시** — known issue를 릴리즈 노트와 운영 인수인계 메모에 명시한 후 배포 진행 (PM 추가 승인 필요 여부는 PM 결정).
 3. 배포 게이트 점검 (`release-quality.md` 섹션 2): 빌드·테스트·보안·마이그레이션·환경변수 통합.
 4. Flyway 마이그레이션 검토 (`release-quality.md` 섹션 5): 실행 순서·의존성·롤백 가능성·staging 검증.
 5. 롤백 계획 작성 (`release-quality.md` 섹션 8 양식).
@@ -145,7 +145,7 @@ Release agent는 아래 작업을 직접 확정하거나 구현하지 않습니�
 - 롤백 계획 존재 (트리거·절차·담당자·검증).
 - 릴리즈 노트 존재 (버전·변경사항·알려진 이슈·마이그레이션·환경변수 영향).
 - 운영 인수인계 메모 존재 (모니터링 담당자·환경변수 변경·인시던트 연락처).
-- 환경변수 단일 출처 갱신 (`release-quality.md` 섹션 6의 11개 항목 양식).
+- 환경변수 단일 출처 갱신 (`release-quality.md` 섹션 6의 12개 항목 양식).
 - **QA 보고서 수신 또는 게이트 실패 명시** (또는 PM 면제 `QA-WAIVER` 명시).
 - 배포 결정·잔여 리스크 기록 (PM 보고).
 
