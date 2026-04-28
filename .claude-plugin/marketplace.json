@@ -1,0 +1,13 @@
+{
+  "name": "softpuzzle-vibe-kit",
+  "owner": {
+    "name": "HyeonJ",
+    "email": "bpx2710@gmail.com"
+  },
+  "plugins": [
+    {
+      "name": "softpuzzle-vibe-kit",
+      "source": "."
+    }
+  ]
+}

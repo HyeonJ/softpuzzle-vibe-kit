@@ -1,0 +1,23 @@
+{
+  "name": "softpuzzle-vibe-kit",
+  "version": "0.1.0",
+  "description": "Claude Code 기반 프로젝트 수행 키트입니다. 기획, 디자인, 개발, 테스트, 배포 단계를 재사용 가능한 스킬과 템플릿으로 지원합니다.",
+  "author": {
+    "name": "softpuzzle",
+    "email": "contact@softpuzzle.example",
+    "url": "https://www.softpuzzle.co.kr/"
+  },
+  "homepage": "https://www.softpuzzle.co.kr/",
+  "repository": "https://github.com/HyeonJ/softpuzzle-vibe-kit",
+  "license": "MIT",
+  "keywords": [
+    "vibe-coding",
+    "project-management",
+    "software-delivery",
+    "requirements",
+    "design",
+    "development",
+    "qa",
+    "deployment"
+  ]
+}

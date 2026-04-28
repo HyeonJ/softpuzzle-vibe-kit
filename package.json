@@ -1,0 +1,13 @@
+{
+  "name": "softpuzzle-vibe-kit",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "node --check scripts/inspect-frontend-project.mjs && node --check scripts/inspect-api-spec.mjs && node --check scripts/create-api-integration-map.mjs && node --check scripts/smoke-frontend-agent.mjs",
+    "smoke:frontend-agent": "node scripts/smoke-frontend-agent.mjs"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0"
+  }
+}
