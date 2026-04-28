@@ -127,7 +127,7 @@ node scripts/inspect-api-spec.mjs --spec <api-spec>
   7. 401/403 처리 방침
   8. CORS Authorization header 허용 여부
   9. endpoint 기능 매핑표 + 권한별 endpoint 접근 조건
-- **release agent 인수인계 메모**: 환경변수 목록(신규/삭제/기본값 변경), Flyway 마이그레이션 실행 순서(마이그레이션 ID, 의존성, 롤백 가능 여부)
+- **release agent 인수인계 메모** (표준 경로 `docs/handoff-to-release.md`): 환경변수 목록(신규/삭제/기본값 변경), Flyway 마이그레이션 실행 순서(마이그레이션 ID, 의존성, 롤백 가능 여부)
 - **application-architecture agent에 돌려보낼 정합성 확인 결과**: 발견된 미정 정책, 추가로 필요한 endpoint, schema 모순. 현재는 free-form 메모이며, 양식·수신 프로토콜은 후속 spec에서 application-architecture-agent.md / api-contract-handoff.md 보강 시 정의 예정.
 
 ## 범위 밖
